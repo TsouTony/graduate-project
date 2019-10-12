@@ -1,0 +1,45 @@
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>How attractive you are by robot</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <script src="https://kit.fontawesome.com/76e472a2b2.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+	
+<div class="container">
+
+	<div class="nav-bar">
+		<ul>
+	      <li>
+	        <a href="/main">Home</a>
+	      </li>
+	      <li>
+	        <a href="">Blog</a>
+	      </li>
+	      <li class="bars">
+	        <a href="">Sign In  <i class="fas fa-bars fa-lg"></i></a>
+	      </li>
+	    </ul>
+	</div>
+
+	<form action="/login" method="post">
+		<input type="text" name="account">
+		<input type="text" name="password">
+	</form>
+
+	
+
+
+</div>
+
+<style>
+
+
+
+</style>
+
+</body>

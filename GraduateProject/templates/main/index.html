@@ -1,0 +1,205 @@
+<!-- <!DOCTYPE html> -->
+<!-- <html lang="en"> -->
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>How attractive you are by robot</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <script src="https://kit.fontawesome.com/76e472a2b2.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+
+<!-- JavaScript & jQuery 版本-->
+
+<!-- HTML part -->
+
+<!-- show upload image -->
+<div id="check-img-outer-frame" style="display: none;">
+  <div id="check-img-frame">
+    <img src="">
+  </div>
+  <button id="upload-btn" type="submit">OK</button>
+</div>
+
+<div class="container">
+  <!-- navbar template -->
+  <div class="nav-bar">
+    <ul>
+      <li>
+        <a href="/main">Home</a>
+      </li>
+      <li>
+        <a href="">Blog</a>
+      </li>
+      <li class="bars">
+        <a href="">Sign In  <i class="fas fa-bars fa-lg"></i></a>
+      </li>
+    </ul>
+  </div>
+  <!-- navbar template -->
+
+  <!-- header-bar template -->
+  {% if isUploadImg %}
+  <div class="header-bar" style="display: none;">
+  {% else %}
+  <div class="header-bar">
+  {% endif %}
+    <h1>How Attractive You Are By Robot ?</h1>
+    <p>Upload the image to see the score .</p>
+    <div class="select-img-frame">
+      <form id="upload-from" action="" method="post" enctype="multipart/form-data">
+        <label class="select-img-btn">
+          {% csrf_token %}
+          <input id="select-img" type="file" name="img" style="display: none;">
+          <input type="text" name='test' value="fuckyou" style="display: none;;">
+          <i class="far fa-image"></i> UPLOAD NOW
+          <input id="submitBtn" type="submit" style="display: none;" onSubmit="return submitOnce(this)">
+        </label>
+        <!-- <input type="submit" name="submit" value="submit"> -->
+      </form>
+    </div>
+  </div>
+  <!-- header-bar template -->
+
+  <!-- upload-image-display -->
+  {% if isUploadImg %}
+  <div class="current-image-frame">
+  {% else %}
+  <div class="current-image-frame" style="display: none;">
+  {% endif %}
+    <div class="display-image-outer-frame">
+      <div class="display-image-frame">
+        <img src="{{ currentImg.img_url.url }}" alt="">
+        <!-- <img src="" alt=""> -->
+      </div>
+    </div>
+    <div class="image-detail-frame">
+      <div class="image-detail">
+        <div class="image-score"><!-- {{ currentImg.computerScore }} -->7.6</div>
+        <div class="image-creator">Creater By : <a class="creator-link" href="">arron pan</a></div>
+        <div class="image-classification">
+          <div class="classification-item">sun</div>
+          <div class="classification-item">sunshine</div>
+          <div class="classification-item">house</div>
+          <div class="classification-item">tree</div>
+          <div class="classification-item">sky</div>
+        </div>
+      </div>
+        
+    </div>
+  </div>
+
+
+
+  <!-- computer-rank template -->
+  <div class="computer-score-rank">
+    <h1>Computer Score Rank</h1>
+    {% for item in imgs %}
+    <div class="img-outer-frame">
+      <div class="img-frame">
+        <img src="{{ item.img_url.url }}" alt="">
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- computer-rank template -->
+
+  <!-- like-rank template -->
+  <div class="like-score-rank">
+    <h1>Like Rank</h1>
+    {% for item in imgs %}
+    <div class="img-outer-frame">
+      <div class="img-frame">
+        <img src="{{ item.img_url.url }}" alt="">
+        <div class="like-score">
+          <i class="far fa-heart"></i> 9487
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- like-rank template -->
+
+
+  <div class="footer">
+    <hr style="border: 0.3px #fff solid;">
+    <p>© 2019 Created By Aaron Pan. </p>  
+  </div>
+</div>
+
+<!-- JavaScript part -->
+
+<script>
+
+$(document).ready(function(){
+
+  $("#select-img").change(function(){
+    readURL(this);
+  });
+
+  $("#upload-btn").click(function(){
+    $(".container").attr("style", "opacity: 1;");
+    $("#check-img-outer-frame").attr("style", "display: none;");
+    // $("form").submit(function(e){
+      // alert("submit success");
+    // });
+    $("#submitBtn").click();
+    // submitForm();
+  });
+
+  $(".img-frame").dblclick(function(){
+    var imgFrameHtml = $(this).html();
+    if(imgFrameHtml.match("far fa-heart") != null){
+      imgFrameHtml = imgFrameHtml.replace("far fa-heart", "fas fa-heart");
+      $(this).html(imgFrameHtml);
+    } else {
+      imgFrameHtml = imgFrameHtml.replace("fas fa-heart", "far fa-heart");
+      $(this).html(imgFrameHtml);
+    }
+  });
+
+});
+
+function submitForm(){
+  
+}
+
+function readURL(input) {
+
+  if(input.files && input.files[0]) {
+    $(".container").attr("style", "opacity: 0.5;");
+    $("#check-img-outer-frame").attr("style", "display: block;");
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      $("#check-img-frame img").attr("src", e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+
+}
+
+var submitcount=0;
+
+function submitOnce (form){
+
+  if (submitcount == 0){
+    submitcount++;
+
+    return true;
+
+  } else{
+
+    alert("fuck")
+
+    return false;
+
+  } 
+}
+
+</script>
+
+</body>
+</html>
