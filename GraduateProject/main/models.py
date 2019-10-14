@@ -2,6 +2,7 @@ from django.db import models
 
 from django.contrib import admin
 
+from .system.storage import ImageStorage
 # Create your models here.
 class User(models.Model):
 	name = models.CharField(max_length=50)
@@ -14,8 +15,8 @@ class User(models.Model):
 class Img(models.Model):
 
 	# img_id = models.CharField(max_length=50)
-	img_url = models.ImageField(upload_to='img')
-	computerScore =  models.IntegerField()
+	img_url = models.ImageField(upload_to='img', storage=ImageStorage())
+	computerScore =  models.FloatField(null = True, blank = True)
 	like = models.IntegerField()
 	create_time = models.DateTimeField(auto_now=True)
 	creator = models.ForeignKey('User', on_delete=models.CASCADE)
@@ -35,6 +36,3 @@ class Commend(models.Model):
 		return self.commend_id
 
 
-admin.site.register(User)
-admin.site.register(Img)
-admin.site.register(Commend)
