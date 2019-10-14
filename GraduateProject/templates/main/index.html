@@ -49,6 +49,7 @@
   {% endif %}
     <h1>How Attractive You Are By Robot ?</h1>
     <p>Upload the image to see the score .</p>
+    <p>You have visited this page {{ num_visits }}{%if num_visits == 1%} time{%else%} times{%endif%}.</p>
     <div class="select-img-frame">
       <form id="upload-from" action="" method="post" enctype="multipart/form-data">
         <label class="select-img-btn">
@@ -78,7 +79,7 @@
     </div>
     <div class="image-detail-frame">
       <div class="image-detail">
-        <div class="image-score"><!-- {{ currentImg.computerScore }} -->7.6</div>
+        <div class="image-score">{{ currentImg.computerScore }}</div>
         <div class="image-creator">Creater By : <a class="creator-link" href="">arron pan</a></div>
         <div class="image-classification">
           <div class="classification-item">sun</div>
