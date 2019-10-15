@@ -1,2 +1,2 @@
-imgDirectoryPath = 'C:/Users/user/Desktop/Tony/GraduateProject/media'
-h5WeightPath ='C:/Users/user/Desktop/Tony/GraduateProject/main/weights/mobilenet_weights.h5'
+imgDirectoryPath = 'C:/Users/A02wxy/Desktop/GraduateProject/media'
+h5WeightPath ='C:/Users/A02wxy/Desktop/GraduateProject/main/weights/mobilenet_weights.h5'

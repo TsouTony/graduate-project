@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from main.models import Img
-
+from django.contrib.auth.decorators import login_required
 from .score_mobilenet_input import assessPicture
 
 # Create your views here.
+
 
 def main(request):
 
@@ -11,8 +12,10 @@ def main(request):
 	request.session['num_visits'] = num_visits + 1
 	isUploadImg = False
 	img = None
+
+	print(request.user.username)
 	if request.method == 'POST':
-		img = Img(img_url = request.FILES.get('img'), computerScore=3)
+		img = Img(img_url = request.FILES.get('img'), creator = request.user)
 		img.save()
 		isUploadImg = True
 		img.computerScore = assessPicture(str(img.img_url))
