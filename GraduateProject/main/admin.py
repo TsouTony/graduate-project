@@ -7,4 +7,8 @@ admin.site.register(Img,adminIMG)
 
 # admin.site.register(User)
 
-admin.site.register(Comment)
+
+class adminCOMMENT(admin.ModelAdmin):
+    list_display = ('creator','create_time','content')
+
+admin.site.register(Comment,adminCOMMENT)

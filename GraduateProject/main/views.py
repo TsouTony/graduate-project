@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from main.models import Img
+from main.models import Img, Comment
 from django.contrib.auth.decorators import login_required
 from .score_mobilenet_input import assessPicture
 
@@ -14,12 +14,17 @@ def main(request):
 	img = None
 
 	print(request.user.username)
-	if request.method == 'POST':
+	if request.method == 'POST' and request.content_type == 'multipart/form-data':
+		print(request.content_type)
 		img = Img(img_url = request.FILES.get('img'), creator = request.user)
 		img.save()
 		isUploadImg = True
 		img.computerScore = assessPicture(str(img.img_url))
 		img.save()
+
+	if request.method == 'POST' and request.content_type == 'application/x-www-form-urlencoded':
+		comment = Comment(content = request.POST.get('comment_field'), creator = request.user)
+		comment.save()
 
 	imgs = Img.objects.all().order_by('-computerScore')
 	currentImg = img
