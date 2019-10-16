@@ -97,11 +97,19 @@
           <div class="classification-item">tree</div>
           <div class="classification-item">sky</div>
         </div>
+        <div class = "image-comment">
+          <form action="" method="post">
+            {% csrf_token %}
+            <label for="comment">Enter comment: </label>
+            <input id="comment" type="text" name="comment_field" value="enter here">
+            <input type="submit" value="OK">
+          </form>
+        </div>
       </div>
         
     </div>
   </div>
-
+<!-- upload-image-display -->
 
 
   <!-- computer-rank template -->
@@ -110,7 +118,7 @@
     {% for item in imgs %}
     <div class="img-outer-frame">
       <div class="img-frame">
-        <img src="{{ item.img_url.url }}" alt="">
+        <img src="{{ item.img_url }}" alt="">
       </div>
     </div>
     {% endfor %}
@@ -123,7 +131,7 @@
     {% for item in imgs %}
     <div class="img-outer-frame">
       <div class="img-frame">
-        <img src="{{ item.img_url.url }}" alt="">
+        <img src="{{ item.img_url }}" alt="">
         <div class="like-score">
           <i class="far fa-heart"></i> 9487
         </div>
