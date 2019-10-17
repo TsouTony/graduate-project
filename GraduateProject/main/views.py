@@ -7,7 +7,6 @@ from .score_mobilenet_input import assessPicture
 
 
 def main(request):
-
 	num_visits = request.session.get('num_visits',0)
 	request.session['num_visits'] = num_visits + 1
 	isUploadImg = False
@@ -26,13 +25,14 @@ def main(request):
 		comment = Comment(content = request.POST.get('comment_field'), creator = request.user)
 		comment.save()
 
+	comments = Comment.objects.all().order_by('create_time')
 	imgs = Img.objects.all().order_by('-computerScore')
-	currentImg = img
 	context = {
 		'imgs' : imgs,
 		'isUploadImg' : isUploadImg,
-		'currentImg' : currentImg,
+		'currentImg' : img,
 		'num_visits' : num_visits,
+		'comments' : comments,
 	}
 
 	return render(request, 'main/index.html', context);
