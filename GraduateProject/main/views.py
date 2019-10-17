@@ -1,53 +1,45 @@
 from django.shortcuts import render
+from django.contrib import auth
+from django.http import HttpResponseRedirect 
 from main.models import Img
-from django.contrib.auth.decorators import login_required
-from .score_mobilenet_input import assessPicture
 
 # Create your views here.
 
-
 def main(request):
 
-	num_visits = request.session.get('num_visits',0)
-	request.session['num_visits'] = num_visits + 1
 	isUploadImg = False
 	img = None
 
-	print(request.user.username)
 	if request.method == 'POST':
-		img = Img(img_url = request.FILES.get('img'), creator = request.user)
+		img = Img(img_url = request.FILES.get('img'))
 		img.save()
 		isUploadImg = True
-		img.computerScore = assessPicture(str(img.img_url))
-		img.save()
 
-	imgs = Img.objects.all().order_by('-computerScore')
+	imgs = Img.objects.all()
 	currentImg = img
 	context = {
 		'imgs' : imgs,
 		'isUploadImg' : isUploadImg,
-		'currentImg' : currentImg,
-		'num_visits' : num_visits,
+		'currentImg' : currentImg
 	}
 
 	return render(request, 'main/index.html', context);
 
-# def uploadImg(request):
+def login(request):
+	if request.user.is_authenticated:
+		return HttpResponseRedirect('/main/')
+	username = request.POST.get('username', '')
+	password = request.POST.get('password', '')
+	user = auth.authenticate(username=username, password=password)
+	if user is not None and user.is_activate:
+		auth.login(request, user)
+		return HttpResponseRedirect('/main/')
+	else :
+		return render(request, 'login.html', locals())
 
-# 	if request.method == 'POST':
-# 		img = Img(img_url = request.FILES.get('img'))
-# 		img.save()
-# 		isUploadImg = True
-
-# 	imgs = Img.objects.all()
-# 	currentImg =  img
-# 	context = {
-# 		'imgs' : imgs,
-# 		'isUploadImg' : isUploadImg,
-# 		'currentImg' : currentImg
-# 	}
-
-# 	return render(request, 'isUploadImg/index.html', context)
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/main/')
 
 
 

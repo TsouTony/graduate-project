@@ -8,14 +8,20 @@
 body {
 	background-color: #000;
 	color: #fff;
-	font-family: airal;
+	font-family: airel;
 	text-align: center;
-	/*padding: 0px 100px;*/
+}
+
+.container {
+	margin: 0px auto;
+	width: 1200px;
+	/*border: 1px solid #fff;*/
 }
 
 .nav-bar ul {
 	position: fixed;
 	background-color: #000;
+	padding: 0px 30px;
 	width: 100%;
 	text-align: left;
 	z-index: 10;
@@ -23,7 +29,7 @@ body {
 
 .nav-bar ul li {
 	display: inline-block;
-	margin: 20px 20px 15px 10px;
+	margin: 20px 10px 15px 10px;
 }
 
 .nav-bar ul li a {
@@ -34,12 +40,12 @@ body {
 }
 
 .nav-bar, .computer-score-rank, .like-score-rank {
-	padding: 0px 100px
+	/*padding: 0px 100px*/
 }
 
 .bars {
 	position: relative;
-	left: 900px;
+	left: 870px;
 }
 
 .header-bar {
@@ -70,22 +76,22 @@ body {
 	margin: 40px;
 	font-size: 24px;
 	text-align: left;
-	margin-left: 10px;
+	padding: 0px 10px
 }
 
 .img-outer-frame {
 	display: inline-block;
-	margin: 5px 4px;
+	margin: 5px 3px;
 	height: auto;
 	/*width: 33vw;*/
-	text-align: center;
+	text-align: left;
 	/*border: 1px #fff solid;*/
 }
 
 .img-frame {
 	position: relative;
-	height: 300px;
-	width: 400px;
+	height: 320px;
+	width: 320px;
 }
 
 .img-frame img {

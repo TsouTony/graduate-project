@@ -38,15 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-
-    # Goole帳號登入(串接第三方帳號登入)
-    # 'django.contrib.auth',
-    # 'django.contrib.messages',
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google'
 ]
 
 MIDDLEWARE = [
@@ -130,6 +121,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+# 設定login後的重導頁面
+LOGIN_REDIRECT_URL = "/main/"
+
+# 設定User models
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -160,5 +156,3 @@ STATICFILES_DIRS = [
 
 # SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/main'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

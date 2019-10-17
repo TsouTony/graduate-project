@@ -18,12 +18,13 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import main
+from main.views import main, login, logout
+from django.contrib.auth import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', main),
-    path('accounts/', include('django.contrib.auth.urls')),
-    # path('uploadImg/', uploadImg),
+    path('accounts/login/', views.LoginView.as_view(), name='login'),
+	path('accounts/logout/', logout),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
