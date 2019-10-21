@@ -17,3 +17,10 @@
 1.學習django form
 2.在網頁上post留言的form
 3.將留言寫入database
+
+2019/10/18
+1.留言顯示
+2.debug
+
+2019/10/21
+1.做Django介紹word檔
