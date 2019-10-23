@@ -26,13 +26,13 @@ class Img(models.Model):
 
 class Comment(models.Model):
 
-	comment_id = models.CharField(max_length=50)
+	comment_id = models.CharField(null = True, blank = True, max_length=50)
 	content = models.TextField(null = True, blank = True)
 	create_time = models.DateTimeField(auto_now=True)
 	creator = models.ForeignKey(User, on_delete=models.CASCADE)
-	img = models.ForeignKey('Img', on_delete=models.CASCADE)
+	img = models.ForeignKey('Img', on_delete=models.CASCADE, null = True, blank = True)
 
-	def __str__(self):
-		return self.commend_id
+	'''def __str__(self):
+		return self.commend_id'''
 
 

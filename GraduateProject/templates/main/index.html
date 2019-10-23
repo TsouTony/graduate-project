@@ -97,11 +97,23 @@
           <div class="classification-item">tree</div>
           <div class="classification-item">sky</div>
         </div>
+        <div class = "image-comment">
+          {%for comment in comments%}
+          <p>{{ comment.content }}</p>
+          {%endfor%}
+        <div class = "image-comment-post">
+          <form action="" method="post">
+            {% csrf_token %}
+            <label for="comment">Enter comment: </label>
+            <input id="comment" type="text" name="comment_field" value="enter here">
+            <input type="submit" value="OK">
+          </form>
+        </div>
       </div>
         
     </div>
   </div>
-
+<!-- upload-image-display -->
 
 
   <!-- computer-rank template -->
