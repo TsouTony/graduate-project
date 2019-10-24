@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from main.models import Img, User, Comment
+from .score_mobilenet_input import assessPicture
 
 
 # Create your views here.
@@ -24,6 +25,9 @@ def main(request):
         img = Img(id=imgID, img_url=request.FILES.get('img'), author=loginUser, cmpScore=randCmpScore, like=0)
         img.save()
         isUploadImg = True
+        img.cmpScore = assessPicture(str(img.img_url))
+        img.save()
+        
 
     imgListOrderByCmpScore = Img.objects.order_by("-cmpScore")
     imgListOrderByLike = Img.objects.order_by("-like")
