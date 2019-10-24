@@ -18,12 +18,22 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import main
+from main.views import main, login, logout, blog, imgDetail, addComment
+from django.contrib.auth import views
 
 
 urlpatterns = [
+    # 後台控制界面
     path('admin/', admin.site.urls),
     path('main/', main),
-    path('accounts/', include('django.contrib.auth.urls')),
-    # path('uploadImg/', uploadImg),
+    # blog url
+    path('blog/<str:user>', blog),
+    # imgDetail url
+    path('blog/<str:user>/<int:imgID>', imgDetail),
+    # 新增commend url
+    path('blog/addComment', addComment),
+    # 登入url
+    path('accounts/login/', views.LoginView.as_view(), name='login'),
+    # 登出url
+	path('accounts/logout/', logout)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

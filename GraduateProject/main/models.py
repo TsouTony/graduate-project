@@ -1,38 +1,48 @@
 from django.db import models
+
 from django.contrib import admin
-from .system.storage import ImageStorage
 from django.contrib.auth.models import User
+from .storage import ImageStorage
+
 
 # Create your models here.
-# class User(models.Model):
-# 	name = models.CharField(max_length=50)
-# 	account = models.CharField(max_length=50)
-# 	password = models.CharField(max_length=50)
+# QuerySet 語法 - all()， get()， filter() 和 exclude()
 
-# 	def __str__(self):
-# 		return self.name
+class UserProfile(models.Model):
+    # auth User default field
+    # username
+    # password
+    # first_name
+    # last_name
+    auth_user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
 
 class Img(models.Model):
+    # 每張img要有自己的id
+    id = models.CharField(primary_key=True, max_length=20, null=False)
+    img_url = models.ImageField(null=True, upload_to='img', storage=ImageStorage())
+    cmpScore = models.IntegerField(null=True)
+    like = models.IntegerField(null=True)
+    createTime = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='imgs')
 
-	# img_id = models.CharField(max_length=50)
-	img_url = models.ImageField(upload_to='img', storage=ImageStorage())
-	computerScore =  models.FloatField(null = True, blank = True)
-	like = models.IntegerField(null = True, blank = True)
-	create_time = models.DateTimeField(auto_now=True)
-	creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.id
 
-	# def __str__(self):
-		# return self.img_id
 
 class Comment(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    content = models.TextField()
+    createTime = models.DateTimeField(auto_now=True)
+    img = models.ForeignKey(Img, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
 
-	comment_id = models.CharField(null = True, blank = True, max_length=50)
-	content = models.TextField(null = True, blank = True)
-	create_time = models.DateTimeField(auto_now=True)
-	creator = models.ForeignKey(User, on_delete=models.CASCADE)
-	img = models.ForeignKey('Img', on_delete=models.CASCADE, null = True, blank = True)
-
-	'''def __str__(self):
-		return self.commend_id'''
+    def __str__(self):
+        return self.id
 
 
+admin.site.register(Img)
+admin.site.register(Comment)

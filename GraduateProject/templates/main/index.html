@@ -1,5 +1,6 @@
-<!-- <!DOCTYPE html> -->
-<!-- <html lang="en"> -->
+<!DOCTYPE html>
+<html lang="en">
+
 {% load static %}
 
 <head>
@@ -31,16 +32,17 @@
       <li>
         <a href="/main">Home</a>
       </li>
+    {% if user.is_authenticated %}
       <li>
-        <a href="">Blog</a>
+        <a href="/blog/{{ request.user.username }}">Blog</a>
       </li>
+    {% endif %}
       <li class="bars">
-        {%if user.is_authenticated%}
-          <li>User : {{user.get_username }}</li>
-          <a href="{% url 'logout'%}?next={{request.path}}">Log out<i class="fas fa-bars fa-lg"></i></a>
-        {%else%}
-          <a href="{% url 'login'%}?next={{request.path}}">Log in<i class="fas fa-bars fa-lg"></i></a>
-        {%endif%}
+        {% if user.is_authenticated %}
+          <a href="/accounts/logout">Sign out<!--<i class="fas fa-bars fa-lg"></i>--></a>
+        {% else %}
+          <a href="/accounts/login">Sign in<!-- <i class="fas fa-bars fa-lg"></i> --></a>
+        {% endif %}
       </li>
     </ul>
   </div>
@@ -54,22 +56,17 @@
   {% endif %}
     <h1>How Attractive You Are By Robot ?</h1>
     <p>Upload the image to see the score .</p>
-    <p>You have visited this page {{ num_visits }}{%if num_visits == 1%} time{%else%} times{%endif%}.</p>
     <div class="select-img-frame">
-      {%if user.is_authenticated%}
-        <form id="upload-from" action="" method="post" enctype="multipart/form-data">
-          <label class="select-img-btn">
-            {% csrf_token %}
-            <input id="select-img" type="file" name="img" style="display: none;">
-            <input type="text" name='test' value="fuckyou" style="display: none;;">
-            <i class="far fa-image"></i> UPLOAD NOW
-            <input id="submitBtn" type="submit" style="display: none;" onSubmit="return submitOnce(this)">
-          </label>
-          <!-- <input type="submit" name="submit" value="submit"> -->
-        </form>
-      {%else%}
-        <a href="{% url 'login'%}?next={{request.path}}">UPLOAD NOW</a>
-      {%endif%}
+      <form id="upload-from" action="" method="post" enctype="multipart/form-data">
+        <label class="select-img-btn">
+          {% csrf_token %}
+          <input id="select-img" type="file" name="img" style="display: none;">
+          <input type="text" name='test' value="fuckyou" style="display: none;">
+          <i class="far fa-image"></i> UPLOAD NOW
+          <input id="submitBtn" type="submit" style="display: none;" onSubmit="return submitOnce(this)">
+        </label>
+        <!-- <input type="submit" name="submit" value="submit"> -->
+      </form>
     </div>
   </div>
   <!-- header-bar template -->
@@ -88,8 +85,8 @@
     </div>
     <div class="image-detail-frame">
       <div class="image-detail">
-        <div class="image-score">{{ currentImg.computerScore }}</div>
-        <div class="image-creator">Creater By : <a class="creator-link" href="">{{ currentImg.creator }}</a></div>
+        <div class="image-score"><!-- {{ currentImg.cmpScore }} -->7.6</div>
+        <div class="image-creator">Creater By : <a class="creator-link" href="">arron pan</a></div>
         <div class="image-classification">
           <div class="classification-item">sun</div>
           <div class="classification-item">sunshine</div>
@@ -97,32 +94,23 @@
           <div class="classification-item">tree</div>
           <div class="classification-item">sky</div>
         </div>
-        <div class = "image-comment">
-          {%for comment in comments%}
-          <p>{{ comment.content }}</p>
-          {%endfor%}
-        <div class = "image-comment-post">
-          <form action="" method="post">
-            {% csrf_token %}
-            <label for="comment">Enter comment: </label>
-            <input id="comment" type="text" name="comment_field" value="enter here">
-            <input type="submit" value="OK">
-          </form>
-        </div>
       </div>
         
     </div>
   </div>
-<!-- upload-image-display -->
+
 
 
   <!-- computer-rank template -->
   <div class="computer-score-rank">
     <h1>Computer Score Rank</h1>
-    {% for item in imgs %}
+    {% for item in imgListOrderByCmpScore %}
     <div class="img-outer-frame">
       <div class="img-frame">
-        <img src="{{ item.img_url.url }}" alt="">
+          <a href="/blog/{{ item.author.username }}/{{ item.id }}"><img src="{{ item.img_url.url }}" alt=""></a>
+          <div class="like-score">
+          <i class="far fa-chart-bar"></i> {{ item.cmpScore }}
+        </div>
       </div>
     </div>
     {% endfor %}
@@ -132,12 +120,12 @@
   <!-- like-rank template -->
   <div class="like-score-rank">
     <h1>Like Rank</h1>
-    {% for item in imgs %}
+    {% for item in imgListOrderByLike %}
     <div class="img-outer-frame">
       <div class="img-frame">
-        <img src="{{ item.img_url.url }}" alt="">
+        <a href="/blog/{{ item.author.username }}/{{ item.id }}"><img src="{{ item.img_url.url }}" alt=""></a>
         <div class="like-score">
-          <i class="far fa-heart"></i> 9487
+          <i class="far fa-heart"></i> {{ item.like }}
         </div>
       </div>
     </div>
@@ -145,12 +133,12 @@
   </div>
   <!-- like-rank template -->
 
+</div>
 
-  <div class="footer">
+<div class="footer">
     <hr style="border: 0.3px #fff solid;">
     <p>© 2019 Created By Aaron Pan. </p>  
   </div>
-</div>
 
 <!-- JavaScript part -->
 
