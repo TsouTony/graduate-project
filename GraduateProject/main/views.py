@@ -1,71 +1,110 @@
+import random
+import time
+
+from django.contrib import auth
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from main.models import Img, Comment
-from django.contrib.auth.decorators import login_required
+
+from main.models import Img, User, Comment
 from .score_mobilenet_input import assessPicture
+
 
 # Create your views here.
 
-
 def main(request):
-	num_visits = request.session.get('num_visits',0)
-	request.session['num_visits'] = num_visits + 1
-	isUploadImg = False
-	img = None
+    img = None
+    isUploadImg = False
+    randCmpScore = random.randint(5, 9)
+    loginUserName = request.user.username
+    if loginUserName is not None and loginUserName != '':
+        loginUser = User.objects.get(username=loginUserName)
 
-	print(request.user.username)
-	if request.method == 'POST' and request.content_type == 'multipart/form-data':
-		print(request.content_type)
-		img = Img(img_url = request.FILES.get('img'), creator = request.user)
-		img.save()
-		isUploadImg = True
-		img.computerScore = assessPicture(str(img.img_url))
-		img.save()
+    if request.method == 'POST':
+        imgID = time.strftime('%Y%m%d%H%M%S') + str(random.randint(10, 99))
+        # img = Img(img_url=request.FILES.get('img'),author=request.user.username,computerScoure=cmpScore,like=0)
+        img = Img(id=imgID, img_url=request.FILES.get('img'), author=loginUser, cmpScore=randCmpScore, like=0)
+        img.save()
+        isUploadImg = True
+        img.cmpScore = assessPicture(str(img.img_url))
+        img.save()
+        
 
-	if request.method == 'POST' and request.content_type == 'application/x-www-form-urlencoded':
-		comment = Comment(content = request.POST.get('comment_field'), creator = request.user)
-		comment.save()
+    imgListOrderByCmpScore = Img.objects.order_by("-cmpScore")
+    imgListOrderByLike = Img.objects.order_by("-like")
+    currentImg = img
+    context = {
+        'imgListOrderByCmpScore': imgListOrderByCmpScore,
+        'imgListOrderByLike': imgListOrderByLike,
+        'currentImg': currentImg,
+        'isUploadImg': isUploadImg
+    }
 
-	comments = Comment.objects.all().order_by('create_time')
-	imgs = Img.objects.all().order_by('-computerScore')
-	context = {
-		'imgs' : imgs,
-		'isUploadImg' : isUploadImg,
-		'currentImg' : img,
-		'num_visits' : num_visits,
-		'comments' : comments,
-	}
-
-	return render(request, 'main/index.html', context);
-
-# def uploadImg(request):
-
-# 	if request.method == 'POST':
-# 		img = Img(img_url = request.FILES.get('img'))
-# 		img.save()
-# 		isUploadImg = True
-
-# 	imgs = Img.objects.all()
-# 	currentImg =  img
-# 	context = {
-# 		'imgs' : imgs,
-# 		'isUploadImg' : isUploadImg,
-# 		'currentImg' : currentImg
-# 	}
-
-# 	return render(request, 'isUploadImg/index.html', context)
+    return render(request, 'main/index.html', context)
 
 
+def blog(request, user):
+    user = User.objects.get(username=user)
+    userImgList = user.imgs.all()
+    context = {
+        'user': user,
+        'userImgList': userImgList
+    }
+    return render(request, 'blog/blog.html', context)
 
 
+def imgDetail(request, user, imgID):
+    # 用 if post 新增comments
+    if request.method == 'POST':
+        authorName = request.POST['author']
+        author = User.objects.get(username=authorName)
+        imgID = request.POST['img']
+        currentImg = Img.objects.get(id=imgID)
+        content = request.POST['content']
+        commentID = time.strftime('%Y%m%d%H%M%S') + authorName
+        comment = Comment(id=commentID, author=author, img=currentImg, content=content)
+        comment.save()
+
+    user = User.objects.get(username=user)
+    img = Img.objects.get(id=imgID)
+    commentList = img.comments.all()
+    print(img.img_url.url)
+    context = {
+        'currentImg': img,
+        'commentList': commentList
+    }
+    return render(request, 'blog/imgDetail.html', context)
 
 
+def addComment(request):
+    authorName = request.POST['author']
+    author = User.objects.get(username=authorName)
+    imgID = request.POST['imgID']
+    currentImg = Img.objects.get(id=imgID)
+    content = request.POST['content']
+    comment = Comment(id='123', author=author, img=currentImg, content=content)
+    comment.save()
+    context = {
+        'currentImg': currentImg,
+    }
+
+    return HttpResponseRedirect('/blog/' + authorName + '/' + imgID)
 
 
+# return render(request, 'blog/imgDetail.html', context)
+
+def login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/main/')
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(username=username, password=password)
+    if user is not None and user.is_activate:
+        auth.login(request, user)
+        return HttpResponseRedirect('/main/')
+    else:
+        return render(request, 'login.html', locals())
 
 
-
-
-
-
-
-
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/main/')

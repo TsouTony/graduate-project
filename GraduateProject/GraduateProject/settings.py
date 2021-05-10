@@ -38,15 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-
-    # Goole帳號登入(串接第三方帳號登入)
-    # 'django.contrib.auth',
-    # 'django.contrib.messages',
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google'
 ]
 
 MIDDLEWARE = [
@@ -64,7 +55,7 @@ ROOT_URLCONF = 'GraduateProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates').replace('\\','/')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates').replace('\\', '/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,8 +77,8 @@ WSGI_APPLICATION = 'GraduateProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'imgs',
-        'USER' : 'root',
+        'NAME': 'database',
+        'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306' 
@@ -130,6 +121,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+# 設定login後的重導頁面
+LOGIN_REDIRECT_URL = "/main/"
+
+# 設定User models
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -140,25 +136,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# 串接Google登入
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend',
-#     'allauth.account.auth_backends.AuthenticationBackend'
-# )
-
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'SCOPE': [
-#             'profile',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
-#         }
-#     }
-# }
-
-# SITE_ID = 1
-
-LOGIN_REDIRECT_URL = '/main'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
